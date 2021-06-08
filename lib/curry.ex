@@ -97,7 +97,7 @@ defmodule Curry do
         Kernel.apply(fun, args)
 
       val when val > 0 and type == :curry ->
-        ## We currying, return a function that takes a single argument
+        ## We are currying, return a function that takes a single argument
         fn arg -> do_generate_next(fun, args ++ [arg], type) end
 
       1 ->
