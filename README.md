@@ -1,6 +1,6 @@
 # Curry
 
-A simple module to do currying and partial application using Variadic functionsto start partial evaluation (i.e. no lists needed).
+A simple module to do currying and partial application using Variadic functions to start partial evaluation (i.e. no lists needed).
 
 See: https://github.com/nhpip/variadic-elixir
 
