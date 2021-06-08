@@ -2,9 +2,12 @@
 
 A simple module to do currying and partial application using Variadic functionsto start partial evaluation (i.e. no lists needed).
 
-See: 
-  Currying:
- 
+See: https://github.com/nhpip/variadic-elixir
+
+## Example:
+
+** Currying:**
+ ```
     iex(9)> curry_fun = curry(&Curry.test3/3)
     #Function<0.51120925/1 in Curry.curry/1>
 
@@ -25,9 +28,9 @@ See:
       args_still_needed: 3,
       args_collected: 0
     ]
-
-  Partial application:
-
+```
+** Partial application:**
+```
     iex(20)> partial_fun = partial(&Curry.test5/5, 1, 2)
     #Function<19.126501267/3 in :erl_eval.expr/5>
 
@@ -39,6 +42,6 @@ See:
       args_still_needed: 3,
       args_collected: 2
     ]
-
+```
     iex(22)> partial_fun.(3, 4, 5)
     {15, {1, 2, 3, 4, 5}}
