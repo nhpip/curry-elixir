@@ -43,6 +43,7 @@ See: https://github.com/nhpip/variadic-elixir
       args_still_needed: 3,
       args_collected: 2
     ]
-```
+
     iex(22)> partial_fun.(3, 4, 5)
     {15, {1, 2, 3, 4, 5}}
+```
