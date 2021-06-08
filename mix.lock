@@ -1,0 +1,3 @@
+%{
+  "variadic": {:git, "https://github.com/nhpip/variadic-elixir.git", "3c2f7f89d7bddfdf46e3c81dc3760eb19843f6f7", []},
+}
