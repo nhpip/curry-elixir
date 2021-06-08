@@ -6,7 +6,7 @@ See: https://github.com/nhpip/variadic-elixir
 
 ## Example:
 
-**Currying:
+**Currying:**
  ```
     iex(9)> curry_fun = curry(&Curry.test3/3)
     #Function<0.51120925/1 in Curry.curry/1>
@@ -30,7 +30,7 @@ See: https://github.com/nhpip/variadic-elixir
     ]
 ```
 
-**Partial application:
+**Partial application:**
 ```
     iex(20)> partial_fun = partial(&Curry.test5/5, 1, 2)
     #Function<19.126501267/3 in :erl_eval.expr/5>
