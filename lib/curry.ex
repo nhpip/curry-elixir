@@ -24,66 +24,106 @@
 
 defmodule Curry do
   @moduledoc """
+
+  ====================================================================================
+
   A simple module to do currying and partial application using Variadic functions
   to start partial evaluation (i.e. no lists needed).
 
-  Currying:
+  ## Currying example:
 
-    iex(9)> curry_fun = curry(&Curry.test3/3)
-    #Function<0.51120925/1 in Curry.curry/1>
+      iex> curry_fun = curry(&Curry.test3/3)
+      #Function<0.51120925/1 in Curry.curry/1>
 
-    iex(10)> next_fun = curry_fun.(1)
-    #Function<1.51120925/1 in Curry.do_generate_next/3>
+      iex> next_fun = curry_fun.(1)
+      #Function<1.51120925/1 in Curry.do_generate_next/3>
 
-    iex(11)> next_fun = next_fun.(77)
-    #Function<1.51120925/1 in Curry.do_generate_next/3>
+      iex> next_fun = next_fun.(77)
+      #Function<1.51120925/1 in Curry.do_generate_next/3>
 
-    iex(12)> next_fun_or_result = next_fun.(10)
-    {88, {1, 77, 10}}
+      iex)> next_fun_or_result = next_fun.(10)
+      {88, {1, 77, 10}}
 
-    iex(13> info(curry_fun)
-    [
-      function: &Curry.test3/3,
-      type: "Currying",
-      function_arity: 3,
-      args_still_needed: 3,
-      args_collected: 0
-    ]
+      iex> info(curry_fun)
+      [
+        function: &Curry.test3/3,
+        type: "Currying",
+        function_arity: 3,
+        args_still_needed: 3,
+        args_collected: 0
+      ]
 
-  Partial application:
+  ## Partial application example:
 
-    iex(20)> partial_fun = partial(&Curry.test5/5, 1, 2)
-    #Function<19.126501267/3 in :erl_eval.expr/5>
+      iex> partial_fun = partial(&Curry.test5/5, 1, 2)
+      #Function<19.126501267/3 in :erl_eval.expr/5>
 
-    iex(21)> info(partial_fun)
-    [
-      function: &Curry.test5/5,
-      type: "Partial application",
-      function_arity: 5,
-      args_still_needed: 3,
-      args_collected: 2
-    ]
+      iex> info(partial_fun)
+      [
+        function: &Curry.test5/5,
+        type: "Partial application",
+        function_arity: 5,
+        args_still_needed: 3,
+        args_collected: 2
+      ]
 
-    iex(22)> partial_fun.(3, 4, 5)
-    {15, {1, 2, 3, 4, 5}}
+      iex> partial_fun.(3, 4, 5)
+      {15, {1, 2, 3, 4, 5}}
+
+    ====================================================================================
+
   """
 
   import Variadic
 
-  @doc "Does  currying: curry_fun = curry(&Curry.test/3)"
+  @doc """
+  Does currying of the supplied function (capture)
+
+  ## Example:
+
+      iex> curry_fun = curry(&Curry.test3/3)
+      #Function<0.82106290/1 in Curry.curry/1>
+      iex> curry_fun.(1).(2).(3)
+      {6, {1, 2, 3}}
+
+  ## Example:
+
+      iex> curry_fun = Curry.~>(&Curry.test3/3)
+      #Function<0.82106290/1 in Curry.curry/1>
+      iex> last = curry_fun.(1).(2)
+      #Function<1.82106290/1 in Curry.do_generate_next/3>
+      iex> last.(3)
+      {6, {1, 2, 3}}
+  """
   def curry(fun), do:
     fn arg -> do_generate_next(fun, [arg], :curry) end
 
-  @doc "Does currying too: curry_fun = Curry.~>(&Curry.test/3)"
   def unquote(:~>)(fun), do: curry(fun)
 
-  @doc "Does partial application: partial_fun = Curry.~>>(&Curry.test5/5, 1, 2)"
-   defv :partial do
+  @doc """
+  Does partial application
+
+  ## Example:
+
+      iex> partial_fun = Curry.partial(&Curry.test5/5, 1, 2)
+      #Function<19.126501267/3 in :erl_eval.expr/5>
+      iex> partial_fun.(3, 4, 5)
+      {15, {1, 2, 3, 4, 5}}
+
+  ## Example:
+
+      iex> partial_fun = Curry.~>>(&Curry.test5/5, 1, 2)
+      #Function<19.126501267/3 in :erl_eval.expr/5>
+      iex> partial_fun.(3, 4, 5)
+      {15, {1, 2, 3, 4, 5}}
+  """
+  def partial(args)
+  @doc false
+  defv :partial do
     [fun|arguments] = args_to_list(binding())
     do_generate_next(fun, arguments, :partial)
   end
 
-  @doc "Does partial application too: partial_fun = Curry.~>>(&Curry.test5/5, 1, 2)"
   defv :~>> do
     [fun|arguments] = args_to_list(binding())
     do_generate_next(fun, arguments, :partial)
@@ -118,7 +158,20 @@ defmodule Curry do
     end
   end
 
-  @doc "Gets information on your lambda"
+  @doc """
+  Gets information on your lambda
+
+  ## Example:
+
+      iex> Curry.info(partial_fun)
+      [
+        function: &Curry.test5/5,
+        type: "Partial application",
+        function_arity: 5,
+        args_still_needed: 3,
+        args_collected: 2
+      ]
+  """
   def info(fun) do
     {_, env} = :erlang.fun_info(fun, :env)
     {_, module} = :erlang.fun_info(fun, :module)
