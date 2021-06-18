@@ -25,8 +25,6 @@
 defmodule Curry do
   @moduledoc """
 
-  ====================================================================================
-
   A simple module to do currying and partial application using Variadic functions
   to start partial evaluation (i.e. no lists needed).
 
@@ -69,8 +67,6 @@ defmodule Curry do
 
       iex> partial_fun.(3, 4, 5)
       {15, {1, 2, 3, 4, 5}}
-
-    ====================================================================================
 
   """
 
@@ -229,11 +225,8 @@ defmodule Curry do
     arg_list = List.to_string(arg_list)
     fun_cmd = "fn(" <> arg_list <> ") -> Curry.do_generate_next(fun, args ++ [" <> arg_list <> "], type) end"
 
-    {_, tokens} = :elixir.string_to_tokens(String.to_charlist(fun_cmd), 1, "", [])
-    {_, forms} = :elixir.tokens_to_quoted(tokens, "", [])
-    bindings = :erl_eval.add_binding('B', 2, [fun: fun, args: args, type: type])
+    {lambda, _} = Code.eval_string(fun_cmd, fun: fun, args: args, type: type)
 
-    {lambda,_,_} = :elixir.eval_forms(forms,bindings,[])
     lambda
   end
 
