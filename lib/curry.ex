@@ -201,6 +201,20 @@ defmodule Curry do
     ]
   end
 
+  defp make_lambda(arity, fun, args, type) do
+    arg_list = for arg <- 1..arity do
+      last_arg = if arg != arity do ", " else "" end
+      "arg" <> to_string(arg) <> last_arg
+    end
+
+    arg_list = List.to_string(arg_list)
+    fun_cmd = "fn(" <> arg_list <> ") -> Curry.do_generate_next(fun, args ++ [" <> arg_list <> "], type) end"
+
+    {lambda, _} = Code.eval_string(fun_cmd, fun: fun, args: args, type: type)
+
+    lambda
+  end
+
   ##
   ## Some test functions
   ##
@@ -215,19 +229,5 @@ defmodule Curry do
   def test4(a, b, c, d), do: {a + b + c + d, {a, b, c, d}}
 
   def test5(a, b, c, d, e), do: {a + b + c + d + e, {a, b, c, d, e}}
-
-  defp make_lambda(arity, fun, args, type) do
-    arg_list = for arg <- 1..arity do
-      last_arg = if arg != arity do ", " else "" end
-      "arg" <> to_string(arg) <> last_arg
-    end
-
-    arg_list = List.to_string(arg_list)
-    fun_cmd = "fn(" <> arg_list <> ") -> Curry.do_generate_next(fun, args ++ [" <> arg_list <> "], type) end"
-
-    {lambda, _} = Code.eval_string(fun_cmd, fun: fun, args: args, type: type)
-
-    lambda
-  end
 
 end
