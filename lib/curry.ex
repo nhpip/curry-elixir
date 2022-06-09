@@ -30,6 +30,8 @@ defmodule Curry do
 
   ## Currying example:
 
+      iex> import Curry
+
       iex> curry_fun = curry(&Curry.test3/3)
       #Function<0.51120925/1 in Curry.curry/1>
 
@@ -126,7 +128,7 @@ defmodule Curry do
   end
 
   def do_generate_next(fun, args, type) do
-    {_, arity} = :erlang.fun_info(fun, :arity)
+    {_, arity} = Function.info(fun, :arity)
 
     case arity - length(args) do
       0 ->
@@ -169,8 +171,8 @@ defmodule Curry do
       ]
   """
   def info(fun) do
-    {_, env} = :erlang.fun_info(fun, :env)
-    {_, module} = :erlang.fun_info(fun, :module)
+    {_, env} = Function.info(fun, :env)
+    {_, module} = Function.info(fun, :module)
 
     {tfun, args, type} = case module do
       Curry ->
@@ -189,7 +191,7 @@ defmodule Curry do
 
     type = if type == :partial do "Partial application" else "Currying" end
 
-    {_, arity} = :erlang.fun_info(tfun, :arity)
+    {_, arity} = Function.info(tfun, :arity)
     args_collected = length(List.flatten(args))
 
     [
