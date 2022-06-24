@@ -6,6 +6,7 @@ defmodule Curry.MixProject do
       app: :curry_elixir,
       version: "1.0.0",
       elixir: "~> 1.10",
+      description: description(),
       package: package(),
       name: "Curry Elixir",
       start_permanent: Mix.env() == :prod,
@@ -24,6 +25,10 @@ defmodule Curry.MixProject do
       {:variadic, github: "nhpip/variadic-elixir"},
      {:ex_doc, "~> 0.28.4", only: :dev, runtime: false}
     ]
+  end
+
+  defp description() do
+    "A simple module to do currying and partial application using Variadic functions to start partial evaluation"
   end
 
   defp package() do
