@@ -96,6 +96,7 @@ defmodule Curry do
   def curry(fun), do:
     fn arg -> do_generate_next(fun, [arg], :curry) end
 
+  @doc false
   def unquote(:~>)(fun), do: curry(fun)
 
   @doc """
@@ -115,18 +116,25 @@ defmodule Curry do
       iex> partial_fun.(3, 4, 5)
       {15, {1, 2, 3, 4, 5}}
   """
+
   def partial(args)
+
   @doc false
   defv :partial do
     [fun|arguments] = args_to_list(binding())
     do_generate_next(fun, arguments, :partial)
   end
 
+  @doc false
   defv :~>> do
     [fun|arguments] = args_to_list(binding())
     do_generate_next(fun, arguments, :partial)
   end
 
+  @doc """
+  Generates the next lambda or the result
+
+  """
   def do_generate_next(fun, args, type) do
     {_, arity} = Function.info(fun, :arity)
 
@@ -157,7 +165,7 @@ defmodule Curry do
   end
 
   @doc """
-  Gets information on your lambda
+  Gets information about the lambda/fn
 
   ## Example:
 
@@ -220,16 +228,22 @@ defmodule Curry do
   ##
   ## Some test functions
   ##
+  @doc false
   def test0(), do: :hello
 
+  @doc false
   def test1(a), do: {a * 5, a}
 
+  @doc false
   def test2(a, b), do: {a + b, {a, b}}
 
+  @doc false
   def test3(a, b, c), do: {a + b + c, {a, b, c}}
 
+  @doc false
   def test4(a, b, c, d), do: {a + b + c + d, {a, b, c, d}}
 
+  @doc false
   def test5(a, b, c, d, e), do: {a + b + c + d + e, {a, b, c, d, e}}
 
 end

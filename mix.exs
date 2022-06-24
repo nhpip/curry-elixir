@@ -3,9 +3,11 @@ defmodule Curry.MixProject do
 
   def project do
     [
-      app: :curry,
-      version: "0.1.0",
+      app: :curry_elixir,
+      version: "1.0.0",
       elixir: "~> 1.10",
+      package: package(),
+      name: "Curry Elixir",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -19,7 +21,16 @@ defmodule Curry.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:variadic, github: "nhpip/variadic-elixir"}
+      {:variadic, github: "nhpip/variadic-elixir"},
+     {:ex_doc, "~> 0.28.4", only: :dev, runtime: false}
+    ]
+  end
+
+  defp package() do
+    [
+      files: ~w(lib .formatter.exs mix.exs README* LICENSE*),
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/nhpip/curry-elixir"}
     ]
   end
 end
