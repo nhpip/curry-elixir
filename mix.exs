@@ -22,8 +22,8 @@ defmodule Curry.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:variadic, github: "nhpip/variadic-elixir"},
-     {:ex_doc, "~> 0.28.4", only: :dev, runtime: false}
+      {:variadic_elixir, github: "nhpip/variadic-elixir"},
+      {:ex_doc, "~> 0.28.4", only: :dev, runtime: false}
     ]
   end
 
